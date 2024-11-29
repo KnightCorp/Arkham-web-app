@@ -1,0 +1,287 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Metacopy";
+  src: url("https://db.onlinewebfonts.com/t/e8574f26c1e2dbc4f9a8efe3c56b738f.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 98%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.9%;
+  }
+}
+
+html,
+body {
+  @apply bg-white dark:bg-black text-black/90 dark:text-white/90;
+  font-family: "Special Elite", monospace;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+.font-serif {
+  font-family: "Special Elite", monospace;
+  letter-spacing: 0.02em;
+}
+
+.font-metacopy {
+  font-family: "Special Elite", monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.font-sans {
+  font-family: "Special Elite", monospace;
+}
+
+.font-detective {
+  font-family: "Special Elite", monospace;
+  letter-spacing: 0.02em;
+}
+
+.font-evidence {
+  font-family: "Crimson Text", serif;
+  letter-spacing: 0.01em;
+}
+
+/* Global text styles */
+.text-title {
+  @apply font-detective text-xl md:text-2xl tracking-wide;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.text-subtitle {
+  @apply font-detective text-lg tracking-wide text-black/80 dark:text-white/80;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.text-body {
+  @apply font-detective text-base leading-relaxed;
+}
+
+/* Button styles */
+.btn-detective {
+  @apply px-4 py-2 bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 border border-black/20 dark:border-white/20;
+  @apply font-detective text-black/90 dark:text-white/90 transition-all duration-300;
+  @apply rounded shadow-lg hover:shadow-xl;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Card styles */
+.card-detective {
+  @apply bg-white/60 dark:bg-black/60 backdrop-blur-lg border border-black/20 dark:border-white/20;
+  @apply rounded-lg shadow-lg;
+  @apply transition-all duration-300;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4),
+    inset 0 0 40px rgba(255, 255, 255, 0.02);
+}
+
+/* Glass card effect */
+.glass-card {
+  @apply bg-white/40 dark:bg-black/40 backdrop-blur-lg border border-black/10 dark:border-white/10;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Vignette effect */
+.bg-radial-gradient {
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.6) 70%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+}
+
+/* Film grain animation */
+@keyframes noise {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-5%, -5%);
+  }
+  20% {
+    transform: translate(-10%, 5%);
+  }
+  30% {
+    transform: translate(5%, -10%);
+  }
+  40% {
+    transform: translate(-5%, 15%);
+  }
+  50% {
+    transform: translate(-10%, 5%);
+  }
+  60% {
+    transform: translate(15%, 0);
+  }
+  70% {
+    transform: translate(0, 10%);
+  }
+  80% {
+    transform: translate(-15%, 0);
+  }
+  90% {
+    transform: translate(10%, 5%);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-black/30 dark:bg-white/30;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-black/20 dark:bg-white/20 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-black/30 dark:bg-white/30;
+}
+
+/* Main content area styles */
+.glass-card {
+  @apply bg-white/60 dark:bg-black/60 backdrop-blur-lg border border-black/10 dark:border-white/10;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.menu-header {
+  background-image: url("https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&q=80&w=1200");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.menu-header::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4));
+}
+
+.nav-tab {
+  @apply px-6 py-2 text-gray-400 transition-all duration-300;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.nav-tab.active {
+  @apply text-white;
+  background: rgba(40, 40, 40, 0.9);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.stats-card {
+  @apply px-4 py-3 rounded;
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.game-button {
+  @apply rounded transition-all duration-300 p-4 text-center;
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.game-button:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(40, 40, 40, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.action-button {
+  @apply px-4 py-2 rounded transition-all duration-300 text-sm;
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.action-button:hover {
+  background: rgba(40, 40, 40, 0.9);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.action-button.red {
+  background: rgba(40, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.action-button.red:hover {
+  background: rgba(60, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.modal-box {
+  @apply rounded p-6;
+  background: rgba(10, 10, 10, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+}
