@@ -21,7 +21,7 @@ export function Auth() {
           setIsLoading(false);
         }}
       >
-        <source src="login_page.mp4" type="video/mp4" />
+        <source src="/login_page.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       {/* <img
@@ -31,7 +31,7 @@ export function Auth() {
       /> */}
 
       <Avatar className="absolute top-4 right-4 w-16 h-16 md:w-24 md:h-24 object-contain z-10 rounded-full">
-        <AvatarImage src="./logo.jpeg" />
+        <AvatarImage src="/logo.jpeg" />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
 
