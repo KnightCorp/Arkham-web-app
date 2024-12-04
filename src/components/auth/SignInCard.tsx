@@ -17,13 +17,14 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SignInSchema } from "@/lib/ZodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, TriangleAlert } from "lucide-react";
+import { useGoogleLogin } from "@react-oauth/google";
+import { CircleCheckBig, Loader2, TriangleAlert } from "lucide-react";
+import { PlayFab, PlayFabClient } from "playfab-sdk";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaGoogle, FaInstagram, FaLinkedin } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { PlayFab, PlayFabClient } from "playfab-sdk";
 
 PlayFab.settings.titleId = import.meta.env.VITE_PLAYFAB_TITLE_ID;
 
@@ -33,7 +34,9 @@ PlayFab.settings.titleId = import.meta.env.VITE_PLAYFAB_TITLE_ID;
 
 export const SignInCard = () => {
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [pending, setPending] = useState(false);
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
     defaultValues: {
@@ -43,31 +46,41 @@ export const SignInCard = () => {
   });
 
   async function onSubmit(values: z.infer<typeof SignInSchema>) {
-    console.log(values);
     try {
       setPending(true);
 
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.usernameOrEmail);
 
       if (isEmail) {
-        const res = PlayFabClient.LoginWithEmailAddress(
+        PlayFabClient.LoginWithEmailAddress(
           {
-            TitleId: PlayFab.settings.titleId,
             Email: values.usernameOrEmail,
             Password: values.password,
           },
           (error, result) => {
             if (error) {
-              alert("Login failed");
-              throw new Error(error.errorMessage);
+              setError("Login failed ,Try again later");
             }
-            console.log(result);
-            alert("Login successful");
+            if (result && result.data) {
+              localStorage.setItem("isLoggedIn", "true");
+              if (result.data.EntityToken && result.data.EntityToken.Entity) {
+                setSuccess("Login successful");
+                localStorage.setItem(
+                  "entityId",
+                  result.data.EntityToken.Entity.Id!
+                );
+                localStorage.setItem(
+                  "entityToken",
+                  result.data.EntityToken.EntityToken!
+                );
+              }
+              setPending(false);
+              navigate("/");
+            }
           }
         );
-        console.log(res);
       } else {
-        const res = PlayFabClient.LoginWithPlayFab(
+        PlayFabClient.LoginWithPlayFab(
           {
             TitleId: PlayFab.settings.titleId,
             Username: values.usernameOrEmail,
@@ -75,17 +88,32 @@ export const SignInCard = () => {
           },
           (error, result) => {
             if (error) {
-              alert("Login failed");
-              throw new Error(error.errorMessage);
+              setError("Login failed ,Try again later");
             }
-            console.log(result);
-            alert("Login successful");
+            if (result && result.data) {
+              localStorage.setItem("isLoggedIn", "true");
+              if (result.data.EntityToken && result.data.EntityToken.Entity) {
+                localStorage.setItem(
+                  "sessionTicket",
+                  result.data.SessionTicket!
+                );
+                localStorage.setItem(
+                  "entityId",
+                  result.data.EntityToken.Entity.Id!
+                );
+                localStorage.setItem(
+                  "entityToken",
+                  result.data.EntityToken.EntityToken!
+                );
+                setSuccess("Login successful");
+              }
+              setPending(false);
+              navigate("/");
+            }
           }
         );
-        console.log(res);
       }
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) {
         setError(error.message);
       } else {
@@ -95,6 +123,38 @@ export const SignInCard = () => {
       setPending(false);
     }
   }
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (response) => {
+      try {
+        const accessToken = response.access_token;
+        console.log(response);
+        console.log("Start");
+        PlayFabClient.LinkGoogleAccount(
+          {
+            ServerAuthCode: accessToken,
+            ForceLink: true,
+          },
+          (error, result) => {
+            console.log(result);
+            if (error) {
+              console.log("playfab error", error);
+              setError("Google login failed, try again later");
+            } else if (result && result.data) {
+              console.log(result.data);
+            }
+          }
+        );
+        console.log("End");
+      } catch (error) {
+        console.error(error);
+        setError("Login failed, try again later");
+      }
+    },
+    onError: () => {
+      setError("Google login failed, try again later");
+    },
+  });
 
   return (
     <Card className="relative z-10 bg-opacity-80 p-6 rounded-lg max-w-md w-full bg-transparent border-none">
@@ -110,6 +170,12 @@ export const SignInCard = () => {
         <div className="mb-6 flex items-center  gap-x-2 rounded-md bg-destructive/15 p-3 text-sm md:text-base text-destructive">
           <TriangleAlert className="size-6" />
           <p>{error}</p>
+        </div>
+      )}
+      {!!success && (
+        <div className="mb-6 flex items-center gap-x-2 rounded-md bg-green-400/25 p-3 text-sm md:text-base text-green-400">
+          <CircleCheckBig className="size-4" />
+          <p>{success}</p>
         </div>
       )}
       <CardContent className="space-y-5 px-0 pb-0">
@@ -153,7 +219,7 @@ export const SignInCard = () => {
             <Button
               type="submit"
               className="w-full text-base md:text-lg py-5 bg-white rounded-full hover:bg-white/90 text-black/85 shadow-lg shadow-red-500/50 hover:shadow-red-400/70 transition-shadow"
-              disabled={pending}
+              disabled={pending || form.formState.isSubmitting}
             >
               {pending || form.formState.isSubmitting ? (
                 <>
@@ -171,6 +237,7 @@ export const SignInCard = () => {
           <FaGoogle
             className="cursor-pointer bg-white/20 p-4 rounded-full hover:shadow-lg transition-transform duration-300 hover:scale-105"
             size="50"
+            // onClick={() => googleLogin()}
           />
           <FaInstagram
             className=" cursor-pointer bg-white/20  p-4 rounded-full hover:shadow-lg transition-transform duration-300 hover:scale-105"

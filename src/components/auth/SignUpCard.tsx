@@ -40,6 +40,7 @@ export const SignUpCard = () => {
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
       email: "",
+      username: "",
       password: "",
       confirmPassword: "",
     },
@@ -49,35 +50,45 @@ export const SignUpCard = () => {
     try {
       setPending(true);
 
-      const res = PlayFabClient.RegisterPlayFabUser(
+      PlayFabClient.RegisterPlayFabUser(
         {
           TitleId: PlayFab.settings.titleId,
           Email: values.email,
           Password: values.password,
-          RequireBothUsernameAndEmail: false,
+          Username: values.username,
+          RequireBothUsernameAndEmail: true,
         },
         (error, result) => {
-          console.log(error, result);
-          if (error?.error === "EmailAddressNotAvailable") {
-            setSuccess("");
-            setError("Email already exists");
-            return;
-          } else if (error) {
-            setSuccess("");
-            setError(error.errorMessage);
-            return;
+          if (error) {
+            if (error.errorCode === 1006) {
+              setError("Email already exists");
+            } else if (error.errorCode === 1009) {
+              setError("Username already exists");
+            } else {
+              setError(error.errorMessage);
+            }
+            setPending(false);
           }
-          setError("");
-          setSuccess("Account created successfully!");
-          setTimeout(() => {
+          if (result && result.data) {
+            localStorage.setItem("isLoggedIn", "true");
+            if (result.data.EntityToken && result.data.EntityToken.Entity) {
+              localStorage.setItem("sessionTicket", result.data.SessionTicket!);
+              localStorage.setItem(
+                "entityId",
+                result.data.EntityToken.Entity.Id!
+              );
+              localStorage.setItem(
+                "entityToken",
+                result.data.EntityToken.EntityToken!
+              );
+              setSuccess("Account created successfully");
+            }
+            setPending(false);
             navigate("/");
-          }, 2000);
+          }
         }
       );
-      console.log(res);
-      console.log(values);
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) {
         setError(error.message);
       } else {
@@ -123,6 +134,22 @@ export const SignUpCard = () => {
                       <Input
                         {...field}
                         placeholder="Email"
+                        className="text-white placeholder:text-white placeholder:text-sm md:placeholder:text-lg bg-white/30 rounded-xl h-12 w-full placeholder:font-serif"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Username"
                         className="text-white placeholder:text-white placeholder:text-sm md:placeholder:text-lg bg-white/30 rounded-xl h-12 w-full placeholder:font-serif"
                       />
                     </FormControl>
