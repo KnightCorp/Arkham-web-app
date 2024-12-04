@@ -4,9 +4,9 @@ import { Sidebar } from "./components/Sidebar";
 export default function AppLayout() {
   const isAuthenticated = localStorage.getItem("entityId");
 
-  if (!isAuthenticated) {
-    return <Navigate to="/sign-in" />;
-  }
+  // if (!isAuthenticated) {
+  //   return <Navigate to="/sign-in" />;
+  // }
 
   return (
     <div className="flex h-screen bg-white dark:bg-black relative">
