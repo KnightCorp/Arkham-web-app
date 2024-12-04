@@ -16,7 +16,7 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
       process: "process/browser",
-      buffer: "buffer",
+      buffer: path.resolve(__dirname, "node_modules", "buffer"),
       url: "url",
       https: "https-browserify",
       http: "stream-http",
