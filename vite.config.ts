@@ -39,4 +39,9 @@ export default defineConfig({
     exclude: ["lucide-react"],
     include: ["buffer", "url"],
   },
+  build: {
+    rollupOptions: {
+      external: ["buffer"],
+    },
+  },
 });
