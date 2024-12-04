@@ -1,7 +1,13 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { Sidebar } from "./components/Sidebar";
 
 export default function AppLayout() {
+  const isAuthenticated = localStorage.getItem("entityId");
+
+  if (!isAuthenticated) {
+    return <Navigate to="/sign-in" />;
+  }
+
   return (
     <div className="flex h-screen bg-white dark:bg-black relative">
       {/* Background layers */}
