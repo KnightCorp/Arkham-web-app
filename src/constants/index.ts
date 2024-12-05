@@ -19,13 +19,19 @@ import {
 
 export const menuItems = [
   { id: "home", icon: Home, label: "Home", href: "/" },
-  { id: "lms", icon: BookMarked, label: "LMS", href: "/lms" },
+  { id: "lms", icon: BookMarked, label: "LMS", href: "/lms", locked: true },
   {
     id: "library",
     label: "Library",
     icon: Library,
+    locked: true,
     children: [
-      { id: "content", icon: Book, label: "Content", href: "/content" },
+      {
+        id: "content",
+        icon: Book,
+        label: "Content",
+        href: "/content",
+      },
       {
         id: "visual-novel",
         icon: MonitorPlay,
@@ -40,21 +46,43 @@ export const menuItems = [
       },
     ],
   },
-  { id: "prep-time", icon: Clock, label: "Prep Time", href: "/prep-time" },
+  {
+    id: "prep-time",
+    icon: Clock,
+    label: "Prep Time",
+    href: "/prep-time",
+    locked: true,
+  },
   {
     id: "journal",
     label: "Journal",
     icon: Book,
+    locked: true,
     children: [
-      { id: "journal-main", icon: Book, label: "Journal", href: "/journal" },
-      { id: "contacts", icon: Users, label: "Contacts", href: "/contacts" },
+      {
+        id: "journal-main",
+        icon: Book,
+        label: "Journal",
+        href: "/journal",
+      },
+      {
+        id: "contacts",
+        icon: Users,
+        label: "Contacts",
+        href: "/contacts",
+      },
       {
         id: "relationships",
         icon: Heart,
         label: "Relations",
         href: "/relationships",
       },
-      { id: "network", icon: Network, label: "Network", href: "/network" },
+      {
+        id: "network",
+        icon: Network,
+        label: "Network",
+        href: "/network",
+      },
     ],
   },
   { id: "tech-club", icon: Code, label: "Tech Club", href: "/tech-club" },

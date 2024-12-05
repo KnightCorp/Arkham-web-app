@@ -22,6 +22,7 @@ import AppLayout from "./AppLayout";
 import { SignInCard } from "./components/auth/SignInCard";
 import { SignUpCard } from "./components/auth/SignUpCard";
 import NotFound from "./components/NotFound";
+import { ComingSoon } from "./components/ComingSoon";
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
             <Route path="/contact" element={<ContactSection />} />
             <Route path="/referral" element={<ReferralSection />} />
             <Route path="/match" element={<Match />} />
+            <Route path="/coming-soon" element={<ComingSoon />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
