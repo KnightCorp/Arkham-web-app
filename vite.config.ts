@@ -16,7 +16,7 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
       process: "process/browser",
-      buffer: path.resolve(__dirname, "node_modules", "buffer"),
+      buffer: "buffer",
       url: "url",
       https: "https-browserify",
       http: "stream-http",
@@ -36,12 +36,27 @@ export default defineConfig({
         NodeModulesPolyfillPlugin(),
       ],
     },
-    exclude: ["lucide-react"],
-    include: ["buffer", "url"],
+    include: [
+      "buffer",
+      "url",
+      "https-browserify",
+      "stream-http",
+      "stream-browserify",
+      "process",
+      "http",
+      "https",
+      "stream",
+    ],
   },
   build: {
     rollupOptions: {
-      external: ["buffer"],
+      output: {
+        globals: {
+          buffer: "Buffer",
+        },
+      },
+      external: [],
     },
+    minify: false,
   },
 });
